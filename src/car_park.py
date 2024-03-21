@@ -2,13 +2,15 @@ import matplotlib.pyplot as plt
 
 class CarPark:
     def __init__(self):
+        # Dimensions of the car park
         self.cp_width: int = 82
         self.cp_height: int = 63
 
+        # Lists to store obstacle coordinates and lines
         self.obstacles = []
         self.obstacle_lines = []
 
-        # Defining obstacles
+        # Defining boundary obstacles
         for x in range(self.cp_width + 1):
             self.obstacles.append((x, 0))
             self.obstacles.append((x, self.cp_height))
@@ -41,9 +43,11 @@ class CarPark:
             self.obstacle_lines.append([(x * 4 + 11, 34), (x * 4 + 11, 47)])
             self.obstacle_lines.append([(x * 4 + 11, 57), (x * 4 + 11, 63)])
 
+    # Function to convert grid coordinates to index
     def get_grid_index(self, x, y):
         return x + y * self.cp_width
 
+    # Function to check if a node crosses an obstacle
     def is_not_crossed_obstacle(self, previous_node, current_node):
         is_cross_line = any(
             [
@@ -58,6 +62,7 @@ class CarPark:
                 and not is_cross_line
         )
 
+    # Function to check if two lines intersect
     def intersect(self, line1, line2):
         A = line1[0]
         B = line1[1]
@@ -65,9 +70,11 @@ class CarPark:
         D = line2[1]
         return self.ccw(A, C, D) != self.ccw(B, C, D) and self.ccw(A, B, C) != self.ccw(A, B, D)
 
+    # Function to check counter-clockwise orientation
     def ccw(self, A, B, C):
         return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
 
+    # Function to plot the car park with obstacles
     def plot_car_park(self):
         fig, ax = plt.subplots()
 
@@ -75,6 +82,7 @@ class CarPark:
         for line in self.obstacle_lines:
             ax.plot([line[0][0], line[1][0]], [line[0][1], line[1][1]], 'k-')
 
+        # Setting plot limits and labels
         ax.set_xlim(-1, self.cp_width + 1)
         ax.set_ylim(-1, self.cp_height + 1)
         ax.set_title("Car Park")
@@ -85,5 +93,6 @@ class CarPark:
         plt.show()
 
 if __name__ == "__main__":
+    # Creating an instance of the CarPark class and plotting the car park
     Car_Park = CarPark()
     Car_Park.plot_car_park()
