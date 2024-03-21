@@ -13,8 +13,8 @@ class Node:
 
 
 class AStarRoutePlanner:
-    def __init__(self, parking_lot): 
-        self.parking_lot: CarPark = parking_lot # Reference to the car park object
+    def __init__(self, car_park): 
+        self.car_park: CarPark = car_park # Reference to the car park object
 
 
         # Motion Model: dx, dy, cost for different movements
@@ -36,7 +36,7 @@ class AStarRoutePlanner:
         start_node = Node(start_point[0], start_point[1], 0.0, -1) # Create a start node
         self.goal_node = Node(goal_point[0], goal_point[1], 0.0, -1) # Create a goal node
 
-        open_set = {self.parking_lot.get_grid_index(start_node.x, start_node.y): start_node}  # Nodes to be evaluated
+        open_set = {self.car_park.get_grid_index(start_node.x, start_node.y): start_node}  # Nodes to be evaluated
         closed_set = {} # Evaluated nodes
 
         while open_set:
@@ -70,11 +70,11 @@ class AStarRoutePlanner:
                     current_node.cost + motion[2],
                     current_node_index,
                 )
-                next_node_index = self.parking_lot.get_grid_index(
+                next_node_index = self.car_park.get_grid_index(
                     next_node.x, next_node.y
                 )
 
-                if self.parking_lot.is_not_crossed_obstacle(
+                if self.car_park.is_not_crossed_obstacle(
                         (current_node.x, current_node.y),
                         (next_node.x, next_node.y),
                 ):
@@ -129,9 +129,9 @@ class AStarRoutePlanner:
 
 
 def main():
-    parking_lot = CarPark() # Create a car park object
-    obstacle_x = [obstacle[0] for obstacle in parking_lot.obstacles]
-    obstacle_y = [obstacle[1] for obstacle in parking_lot.obstacles]
+    car_park = CarPark() # Create a car park object
+    obstacle_x = [obstacle[0] for obstacle in car_park.obstacles]
+    obstacle_y = [obstacle[1] for obstacle in car_park.obstacles]
     plt.plot(obstacle_x, obstacle_y, ".k") # Plot obstacles
 
     # Define start and goal points
@@ -151,7 +151,7 @@ def main():
     plt.axis("equal")
 
     # Create AStarRoutePlanner object and search for a route
-    a_star = AStarRoutePlanner(parking_lot)
+    a_star = AStarRoutePlanner(car_park)
     rx, ry = a_star.search_route(start_point, goal_point, False)
 
     # Plot the found route
